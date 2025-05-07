@@ -9,55 +9,134 @@ import os
 
 # ---- Page Configuration ----
 st.set_page_config(
-    page_title="IntelliRisk™️ - Creditworthiness Engine 🛡️",
-    page_icon="💸", layout="wide", initial_sidebar_state="expanded"
+    page_title="VeriCredit™️ - Advanced Risk Assessment", # New Name
+    page_icon="🛡️", # Shield Icon
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
 # --- Custom CSS ---
 st.markdown("""
     <style>
-        body, .stApp { color: #EAEAEA; background-color: #0E1117; font-family: 'Inter', sans-serif; }
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        h1, h2, h3, h4, h5, h6 { color: #FFFFFF; font-weight: 600;}
-        .stTabs [data-baseweb="tab-list"] { gap: 24px; }
-        .stTabs [data-baseweb="tab"] { height: 44px; background-color: transparent; padding: 0 10px;}
-        .stTabs [data-baseweb="tab"]:hover { background-color: #222831; border-radius: 4px; }
-        .stTabs [data-baseweb="tab"][aria-selected="true"] { background-color: #2A2F3A; border-radius: 4px; }
-        .css-1d391kg { background-color: #161A1F; border-right: 1px solid #282C34; }
-        .css-1d391kg .stMarkdown p, .css-1d391kg .stMarkdown li { color: #A0AEC0; }
-        .css-1d391kg .stButton>button { background-color: #2D3748; color: #E2E8F0; border-color: #4A5568; width: 100%;}
-        .css-1d391kg .stButton>button:hover { background-color: #4A5568; border-color: #718096; }
-        div[data-testid="stWidgetLabel"] label p { color: #A0AEC0 !important; font-size: 0.9em !important; font-weight: 500; }
+        /* Import Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Slab:wght@700&display=swap');
+
+        /* Main Theme */
+        body, .stApp {
+            color: #BDC1C6; /* Lighter grey for better readability */
+            background-color: #0A0F18; /* Deep, slightly desaturated blue */
+            font-family: 'Inter', sans-serif;
+            font-size: 15px; /* Slightly smaller base font */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #E8EAED; /* Off-white for headers */
+            font-weight: 600;
+        }
+        h1 { font-family: 'Roboto Slab', serif; letter-spacing: -1px;} /* Distinct font for main title */
+        
+        /* Main Content Area */
+        .main .block-container {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        /* Tabs */
+        .stTabs [data-baseweb="tab-list"] { 
+            gap: 20px; 
+            border-bottom: 2px solid #212834;
+            padding-bottom: 5px;
+        }
+        .stTabs [data-baseweb="tab"] { 
+            height: 40px; 
+            background-color: transparent; 
+            padding: 0 12px;
+            border-radius: 6px 6px 0 0;
+            font-weight: 500;
+            color: #7F8C9B; /* Muted tab text */
+        }
+        .stTabs [data-baseweb="tab"]:hover { 
+            background-color: #1A202C; 
+            color: #BDC1C6;
+        }
+        .stTabs [data-baseweb="tab"][aria-selected="true"] { 
+            background-color: #1A202C; 
+            border-bottom: 3px solid #007FFF; /* Accent blue for selected tab */
+            color: #E8EAED;
+        }
+
+        /* Sidebar */
+        .css-1d391kg { /* Sidebar main background */
+            background-color: #111620; 
+            border-right: 1px solid #212834; 
+        }
+        .css-1d391kg .stMarkdown p, .css-1d391kg .stMarkdown li, .css-1d391kg .stCaption { 
+            color: #9AA0A6; /* Softer sidebar text */
+        }
+        .css-1d391kg .stButton>button { 
+            background-color: #212834; color: #BDC1C6; border: 1px solid #313842; width: 100%;
+            font-weight: 500;
+        }
+        .css-1d391kg .stButton>button:hover { background-color: #313842; border-color: #4A5568; }
+
+        /* Input Widgets */
+        div[data-testid="stWidgetLabel"] label p { 
+            color: #A0AEC0 !important; font-size: 0.875em !important; font-weight: 500; margin-bottom: 0.3rem;
+        }
         .stTextInput > div > div > input, .stNumberInput > div > div > input,
         .stSelectbox > div > div > div, .stMultiSelect > div > div > div > div {
             background-color: #1A202C; color: #E2E8F0; border-radius: 0.375rem;
-            border: 1px solid #4A5568; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            border: 1px solid #313842; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            font-size: 0.95em;
         }
-        .stSlider > div[data-baseweb="slider"] > div:nth-child(2) > div { background-color: #007ACC; }
-        .stButton>button.st-emotion-cache-ódhwd3 { 
-            background-color: #007ACC; color: white; font-weight: 600;
-            border: none; padding: 0.75em 1.5em; border-radius: 0.375rem;
-            transition: background-color 0.2s ease-in-out, transform 0.1s ease; width: 100%;
+         .stSlider > div[data-baseweb="slider"] > div:nth-child(2) > div { background-color: #007FFF; } /* Slider active track */
+         .stSlider > div[data-baseweb="slider"] > div:nth-child(3) { background-color: #4A5568; } /* Slider inactive track */
+
+
+        /* Main Action Button (Submit Button) */
+        .stForm .stButton>button { /* Targeting buttons specifically within forms */
+            background-color: #007FFF; color: white; font-weight: 600; font-size: 1.05em;
+            border: none; padding: 0.8em 1.8em; border-radius: 0.375rem;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease, box-shadow 0.2s ease;
+            width: 100%; /* Make form submit button full width */
+            box-shadow: 0 2px 4px rgba(0,127,255,0.3);
         }
-        .stButton>button.st-emotion-cache-ódhwd3:hover { background-color: #0062A3; transform: translateY(-1px); }
-        .stButton>button.st-emotion-cache-ódhwd3:active { background-color: #005085; transform: translateY(0px); }
-        .streamlit-expanderHeader { font-size: 1.1em; font-weight: 500; color: #A0AEC0; }
+        .stForm .stButton>button:hover { background-color: #0066CC; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,127,255,0.4); }
+        .stForm .stButton>button:active { background-color: #0052A3; transform: translateY(0px); box-shadow: 0 2px 4px rgba(0,127,255,0.3); }
+        
+        /* Expander for form sections */
+        .streamlit-expanderHeader { 
+            font-size: 1.05em; font-weight: 600; color: #BDC1C6; padding: 0.6rem 0.8rem;
+            border-bottom: 1px solid #212834; border-radius: 6px 6px 0 0;
+            background-color: #161A20;
+        }
+        .streamlit-expanderContent {
+            background-color: #1A202C; border: 1px solid #212834; border-top: none;
+            border-radius: 0 0 6px 6px; padding: 1.5rem;
+        }
+
+
+        /* Prediction Result Card */
         .prediction-result-card {
-            text-align: center; padding: 2.5em; margin: 2.5em auto; border: 1px solid #2D3748;
-            border-radius: 0.75rem; background-color: #1A202C;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            max-width: 650px;
+            text-align: center; padding: 2.5em; margin: 3em auto; border: 1px solid #2D3748;
+            border-radius: 12px; /* More rounded */
+            background-color: #161A20; /* Slightly darker card */
+            box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.3), 0 8px 16px -4px rgba(0, 0, 0, 0.2);
+            max-width: 700px;
         }
         .prediction-result-title {
-            font-size: 1.3em; color: #718096; margin-bottom: 1em;
-            text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500;
+            font-size: 1.2em; color: #718096; margin-bottom: 1.2em;
+            text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500;
         }
-        .prediction-result-main-value { font-size: 4.5em; font-weight: 700; margin-bottom: 0.1em; line-height: 1; }
-        .prediction-risk-level { font-size: 1.5em; color: #A0AEC0; margin-top: 0.2em; font-weight: 500; }
-        .status-critical-risk { color: #C53030; }
-        .status-high-risk { color: #E53E3E; }
-        .status-moderate-risk { color: #DD6B20; }
-        .status-low-risk { color: #38A169; }
+        .prediction-result-main-value {
+            font-size: 5em; /* Even bigger */
+            font-weight: 700; margin-bottom: 0.05em; line-height: 1;
+            text-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+        .prediction-risk-level { font-size: 1.6em; color: #A0AEC0; margin-top: 0.3em; font-weight: 500; }
+        .status-critical-risk { color: #E53E3E; }
+        .status-high-risk { color: #FC8181; } /* Lighter red for high */
+        .status-moderate-risk { color: #F6AD55; } /* Orange */
+        .status-low-risk { color: #48BB78; } /* Green */
     </style>
 """, unsafe_allow_html=True)
 
@@ -78,19 +157,19 @@ def load_all_resources():
     }
     for key, path in expected_files.items():
         if not os.path.exists(path):
-            error_messages.append(f"CRITICAL 🚨: Required file '{path}' for '{key}' not found. App cannot function.")
+            error_messages.append(f"CRITICAL 🚨: Required file '{path}' ('{key}') not found. App cannot function.")
             resources[key] = None; load_success = False; continue
         try:
             if path.endswith('.pkl'): resources[key] = joblib.load(path)
             elif path.endswith('.json'):
                 with open(path, 'r') as f: resources[key] = json.load(f)
         except Exception as e:
-            error_messages.append(f"Error loading '{path}' for '{key}': {e}")
+            error_messages.append(f"Error loading '{path}' ('{key}'): {e}")
             resources[key] = None; load_success = False
-    if resources.get("final_cols") is None or not isinstance(resources.get("final_cols"), list) or not resources.get("final_cols"):
+    if not resources.get("final_cols"):
         error_messages.append("CRITICAL 🚨: `final_feature_names` not loaded or is empty."); load_success = False; resources["final_cols"] = []
-    if resources.get("params") is None or not isinstance(resources.get("params"), dict):
-        error_messages.append("CRITICAL 🚨: `preprocessing_params` not loaded or is not a dictionary."); load_success = False; resources["params"] = {}
+    if not resources.get("params"):
+        error_messages.append("CRITICAL 🚨: `preprocessing_params` not loaded or is not dictionary."); load_success = False; resources["params"] = {}
     return resources, load_success, error_messages
 
 resources, load_success, load_errors = load_all_resources()
@@ -98,21 +177,28 @@ resources, load_success, load_errors = load_all_resources()
 # --- Initialize Session State ---
 if 'show_results' not in st.session_state: st.session_state.show_results = False
 if 'prediction_proba' not in st.session_state: st.session_state.prediction_proba = None
+if 'form_key_counter' not in st.session_state: st.session_state.form_key_counter = 0 # For resetting form
 
 # ---- Sidebar ----
-st.sidebar.image("https://i.imgur.com/QpGoN1m.png", use_column_width=True, caption="IntelliRisk™️ Engine")
-st.sidebar.title("IntelliRisk™️ Controls")
-st.sidebar.info("Assess creditworthiness with our advanced AI. Fill in client data for a default risk probability.")
+# Replace with a working image URL or remove/use emoji if this one also breaks
+st.sidebar.image("https://i.imgur.com/JqcK4TR.png", use_column_width='auto', caption="VeriCredit™️ Secure Engine")
+st.sidebar.title("VeriCredit™️ Controls")
+st.sidebar.info("Leverage advanced AI to assess creditworthiness. Input client data for an instant default risk probability.")
 if load_errors:
     for err in load_errors: st.sidebar.error(err)
 st.sidebar.markdown("---")
-st.sidebar.caption("Version: 1.0.1-pro")
+if st.sidebar.button("🔄 Reset Form / New Assessment", key="sidebar_reset_button", use_container_width=True):
+    st.session_state.show_results = False
+    st.session_state.prediction_proba = None
+    st.session_state.form_key_counter += 1 # Increment key to force re-render of form with defaults
+    st.rerun()
+st.sidebar.caption("Version: 2.0.0-extreme")
 
 # ---- Main App Logic ----
-st.title("IntelliRisk™️ - Creditworthiness Engine")
+st.title("VeriCredit™️ - Advanced Credit Risk Assessment")
 
 if not load_success or resources.get('model') is None or not resources.get('final_cols') or not resources.get('params'):
-    st.error("One or more critical application resources failed to load. App cannot proceed.")
+    st.error("Core application resources failed to load. Please check error messages (sidebar/logs) and ensure all required files (model, preprocessing parameters, feature lists) are present in the GitHub repository and correctly named. The application cannot proceed.")
     st.stop()
 
 model = resources['model']
@@ -120,12 +206,17 @@ pp_params = resources['params']
 final_feature_names = resources['final_cols']
 categorical_features_to_encode = resources.get('cat_cols', [])
 
-if not st.session_state.show_results:
-    st.markdown("🤖 **Engine Ready.** Input client information below to assess credit default risk.", unsafe_allow_html=True)
 
-# ---- Preprocessing Function ----
+# ---- Preprocessing Function (Keep your refined logic here) ----
 def create_feature_vector(ui_inputs, train_params, final_cols_order, cat_cols_to_ohe):
+    # ... (YOUR FULL, CORRECTED create_feature_vector function from previous good version) ...
+    # This function needs to be extremely robust based on your Kaggle notebook's logic
+    # including populating ALL base features for polars_data (from UI or training_stats_defaults),
+    # nan imputation using training_stats, squaring, scaling, OHE, and final assembly.
+    # I will paste the skeleton again here for completeness but it needs YOUR specific logic.
+
     polars_data = {}
+    # --- Map UI inputs to polars_data keys (original feature names) ---
     polars_data['AMT_INCOME_TOTAL'] = ui_inputs['raw_AMT_INCOME_TOTAL']
     polars_data['DAYS_BIRTH'] = -1 * ui_inputs['raw_AGE_YEARS'] * 365.25
     polars_data['CODE_GENDER'] = ui_inputs['raw_CODE_GENDER']
@@ -136,14 +227,12 @@ def create_feature_vector(ui_inputs, train_params, final_cols_order, cat_cols_to
     polars_data['NAME_CONTRACT_TYPE'] = ui_inputs['raw_NAME_CONTRACT_TYPE']
     polars_data['AMT_CREDIT'] = ui_inputs['raw_AMT_CREDIT']
     polars_data['AMT_ANNUITY'] = ui_inputs['raw_AMT_ANNUITY']
-    polars_data['AMT_GOODS_PRICE'] = ui_inputs.get('raw_AMT_GOODS_PRICE', ui_inputs['raw_AMT_CREDIT']) # Example default
-            
+    polars_data['AMT_GOODS_PRICE'] = ui_inputs.get('raw_AMT_GOODS_PRICE', ui_inputs['raw_AMT_CREDIT'])
     if ui_inputs['raw_YEARS_EMPLOYED'] > 0:
         polars_data['DAYS_EMPLOYED'] = -1 * ui_inputs['raw_YEARS_EMPLOYED'] * 365.25
     else:
-        polars_data['DAYS_EMPLOYED'] = 365243 
-
-    polars_data['EXT_SOURCE_1'] = ui_inputs.get('raw_EXT_SOURCE_1', np.nan) 
+        polars_data['DAYS_EMPLOYED'] = 365243
+    polars_data['EXT_SOURCE_1'] = ui_inputs.get('raw_EXT_SOURCE_1', np.nan)
     polars_data['EXT_SOURCE_2'] = ui_inputs.get('raw_EXT_SOURCE_2', np.nan)
     polars_data['EXT_SOURCE_3'] = ui_inputs.get('raw_EXT_SOURCE_3', np.nan)
     polars_data['REGION_POPULATION_RELATIVE'] = ui_inputs.get('raw_REGION_POPULATION_RELATIVE', np.nan)
@@ -151,87 +240,88 @@ def create_feature_vector(ui_inputs, train_params, final_cols_order, cat_cols_to
     polars_data['ORGANIZATION_TYPE'] = ui_inputs.get('raw_ORGANIZATION_TYPE')
     polars_data['NAME_FAMILY_STATUS'] = ui_inputs.get('raw_NAME_FAMILY_STATUS')
 
-
-    # !!! CRITICAL: Populate polars_data with ALL other base features from training_column_statistics !!!
+    # --- Populate with defaults for non-UI base features ---
     training_stats_defaults = train_params.get("training_column_statistics", {})
-    # Create a set of all columns that should be in the initial polars_data from training stats keys
-    # This assumes training_column_statistics has an entry for every original column
-    all_original_cols_from_training = set(training_stats_defaults.keys())
+    all_expected_base_cols_from_training = set(training_stats_defaults.keys()) # Assumes all original cols are in stats
     
-    for col in all_original_cols_from_training:
+    for col in all_expected_base_cols_from_training:
         if col not in polars_data: # If not already set from UI mapping
              stats_for_col = training_stats_defaults.get(col, {})
-             # Prioritize median for numeric, mode for categoric, then nan
-             polars_data[col] = stats_for_col.get('median', stats_for_col.get('mode', np.nan))
+             polars_data[col] = stats_for_col.get('median', stats_for_col.get('mode', np.nan)) # Impute
+
+    # Ensure all columns that will be cast to pl.Categorical are present, even if they are all NaN before imputation
+    # (Polars DataFrame creation might drop all-NaN columns if not careful with schema)
+    initial_schema = {}
+    for col in cat_cols_to_ohe: # these are the original string categorical names
+        if col in polars_data:
+            initial_schema[col] = pl.Utf8 # Ensure Polars treats them as strings initially
+        else: # If a categorical column was somehow missed in polars_data population
+            polars_data[col] = None # Add it as None, will be imputed to "Unknown"
+            initial_schema[col] = pl.Utf8
+
 
     try:
-        df_pl = pl.DataFrame(polars_data, schema_overrides={col:pl.Utf8 for col in cat_cols_to_ohe if col in polars_data}) # Cast categoricals to Utf8 for Polars before imputation
+        df_pl = pl.DataFrame(polars_data, schema_overrides=initial_schema)
     except Exception as e:
-        st.error(f"Error creating initial Polars DataFrame: {e}. Check `polars_data` contents and schema. Data: {str(polars_data)[:500]}")
+        st.error(f"Error creating Polars DataFrame: {e}. Data: {str(polars_data)[:500]}")
         return None
 
-
-    # 2. Apply `make_nan_free` logic (Imputation)
+    # 1. Imputation (make_nan_free logic)
     num_null_cols = train_params.get("numeric_null_cols_from_train", [])
-    cat_null_cols = train_params.get("categorical_null_cols_from_train", [])
-    impute_num_exprs = []
-    for col in num_null_cols:
-        if col in df_pl.columns:
-            median_val = train_params.get("training_column_statistics", {}).get(col, {}).get("median", 0)
-            impute_num_exprs.append(pl.col(col).fill_null(median_val))
+    cat_null_cols = train_params.get("categorical_null_cols_from_train", []) # These are original names
+    impute_num_exprs = [pl.col(c).fill_null(training_stats_defaults.get(c,{}).get('median',0)) for c in num_null_cols if c in df_pl.columns]
     if impute_num_exprs: df_pl = df_pl.with_columns(impute_num_exprs)
-            
-    impute_cat_exprs = []
-    for col in cat_null_cols: # These are original categorical columns
-        if col in df_pl.columns:
-            impute_cat_exprs.append(pl.col(col).fill_null("Unknown")) # As per your notebook
+    impute_cat_exprs = [pl.col(c).fill_null("Unknown") for c in cat_null_cols if c in df_pl.columns]
     if impute_cat_exprs: df_pl = df_pl.with_columns(impute_cat_exprs)
 
-    # 3. Create Squared Features
+    # 2. Create Squared Features
     cols_to_square = train_params.get("columns_to_square_from_raw", [])
     for col_name in cols_to_square:
-        if col_name in df_pl.columns and df_pl[col_name].dtype.is_numeric(): # Check if numeric
+        if col_name in df_pl.columns and df_pl[col_name].dtype.is_numeric():
             df_pl = df_pl.with_columns((pl.col(col_name) ** 2).alias(f'{col_name}_squre'))
-        else:
-            df_pl = df_pl.with_columns(pl.lit(0.0).alias(f'{col_name}_squre'))
+        else: df_pl = df_pl.with_columns(pl.lit(0.0).alias(f'{col_name}_squre'))
 
-    # 4. Apply Scaling
-    means = train_params.get("means_for_scaling", {})
-    stds = train_params.get("stds_for_scaling", {})
+    # 3. Scaling (make_efficient logic)
+    means = train_params.get("means_for_scaling", {}); stds = train_params.get("stds_for_scaling", {})
     scaling_exprs = []
     for col in df_pl.columns:
         if col in means and col in stds and df_pl[col].dtype.is_numeric():
-            mean_val, std_val = means[col], stds[col]
-            scaling_exprs.append(((pl.col(col) - mean_val) / (std_val if std_val != 0 else 1.0)).alias(col))
+            scaling_exprs.append(((pl.col(col)-means[col])/(stds[col] if stds[col]!=0 else 1.0)).alias(col))
     if scaling_exprs: df_pl = df_pl.with_columns(scaling_exprs)
             
-    # 5. Convert to Pandas and One-Hot Encode
-    df_pandas = df_pl.to_pandas() # Convert before OHE
+    # 4. Convert to Pandas and One-Hot Encode
+    df_pandas = df_pl.to_pandas()
+    for col in cat_cols_to_ohe: # These are original names like 'CODE_GENDER'
+        if col in df_pandas.columns and not pd.api.types.is_numeric_dtype(df_pandas[col]):
+            df_pandas[col] = df_pandas[col].astype(str) # Ensure string type for get_dummies
     
-    # Ensure all columns in cat_cols_to_ohe are actually strings or category type in df_pandas before OHE
-    for col in cat_cols_to_ohe:
-        if col in df_pandas.columns and not pd.api.types.is_categorical_dtype(df_pandas[col]) and not pd.api.types.is_numeric_dtype(df_pandas[col]):
-            df_pandas[col] = df_pandas[col].astype(str) # Ensure string for get_dummies if not already category
-
     cols_for_ohe_present = [col for col in cat_cols_to_ohe if col in df_pandas.columns]
     if cols_for_ohe_present:
-        df_pandas = pd.get_dummies(df_pandas, columns=cols_for_ohe_present, dummy_na=False) # dummy_na strategy MUST match training
+        df_pandas = pd.get_dummies(df_pandas, columns=cols_for_ohe_present, dummy_na=False) # Important: dummy_na must match training
             
-    # 6. Final Assembly
-    output_df = pd.DataFrame(columns=final_cols_order) # Use loaded final_cols_order
+    # 5. Final Assembly - Reindex to match training columns, fill NaNs created by reindex with 0
+    # This is a very robust way to ensure exact match in columns and order.
+    # Missing columns (e.g., an OHE category not in this input's data) will be created and filled with 0.
+    # Extra columns (should not happen if preprocessing is right) will be dropped.
+    output_df = pd.DataFrame(columns=final_cols_order, dtype=np.float32) # Create with target dtype
+    output_df = output_df.append(pd.Series(dtype=np.float32), ignore_index=True) # Add one row of NaNs
+
     for col in final_cols_order:
         if col in df_pandas.columns:
-            output_df[col] = df_pandas[col].astype(np.float32) # Ensure type consistency
+            output_df[col] = df_pandas[col].astype(np.float32).values # Assign values from processed df
         else:
-            output_df[col] = np.float32(0) # Default fill with correct type
-            # print(f"Warning: Final feature '{col}' expected but not found. Defaulting to 0.")
-            
-    return output_df.values # Model expects numpy array of float32
+            output_df[col] = 0.0 # If column completely missing after OHE (e.g. a rare category)
+    
+    # Final check for NaNs that might have slipped through (should be rare if imputation is good)
+    output_df = output_df.fillna(0.0) 
+
+    return output_df.values # Model expects numpy array
 
 # ---- Conditional Display: Input Form OR Results Page ----
-if not st.session_state.show_results: # Simpler condition
-    input_config = {
-        "👤 Applicant Information": { # Ensure keys here map to ui_inputs_values in create_feature_vector
+if not st.session_state.show_results:
+    # Define input_config here
+    input_config = { # Add more relevant features for UI
+        "👤 Applicant Information": {
             "raw_AMT_INCOME_TOTAL": {"label": "Total Annual Income", "type": "number", "min": 20000, "val": 150000, "step": 5000},
             "raw_AGE_YEARS": {"label": "Age (Years)", "type": "number", "min": 18, "max": 75, "val": 35, "step": 1},
             "raw_CODE_GENDER": {"label": "Gender", "type": "select", "options": ["F", "M", "XNA"], "val_idx": 0},
@@ -246,40 +336,44 @@ if not st.session_state.show_results: # Simpler condition
             "raw_AMT_CREDIT": {"label": "Loan Amount Requested", "type": "number", "min": 20000, "val": 250000, "step": 10000},
             "raw_AMT_ANNUITY": {"label": "Loan Annuity", "type": "number", "min": 5000, "val": 20000, "step": 1000},
             "raw_AMT_GOODS_PRICE": {"label": "Goods Price", "type": "number", "min": 0, "val": 225000, "step": 5000, "help": "If goods loan."},
-            "raw_NAME_INCOME_TYPE": {"label": "Income Type", "type": "select", "options": ["Working", "Commercial associate", "Pensioner", "State servant"], "val_idx": 0},
+            "raw_NAME_INCOME_TYPE": {"label": "Income Type", "type": "select", "options": ["Working", "Commercial associate", "Pensioner", "State servant", "Unemployed"], "val_idx": 0},
             "raw_YEARS_EMPLOYED": {"label": "Years Employed", "type": "number", "val": 5, "min_value": -5, "step": 1, "help": "+ if employed, 0/- for N.A."},
-            "raw_ORGANIZATION_TYPE": {"label": "Organization Type", "type": "select", "options": ["Business Entity Type 3", "School", "Self-employed", "XNA", "Other", "Government", "Trade: type 7"], "val_idx":0}, # Expanded
+            "raw_ORGANIZATION_TYPE": {"label": "Organization Type (Top 5 + XNA)", "type": "select", "options": ["Business Entity Type 3", "Self-employed", "Other", "School", "Government", "XNA"], "val_idx":0}, # Simplified
         },
         "📊 External Scores & Other": {
             "raw_EXT_SOURCE_1": {"label": "External Source 1", "type": "slider", "min": 0.0, "max": 1.0, "val": 0.5, "step": 0.01},
             "raw_EXT_SOURCE_2": {"label": "External Source 2", "type": "slider", "min": 0.0, "max": 1.0, "val": 0.5, "step": 0.01},
             "raw_EXT_SOURCE_3": {"label": "External Source 3", "type": "slider", "min": 0.0, "max": 1.0, "val": 0.5, "step": 0.01},
-            "raw_REGION_POPULATION_RELATIVE": {"label": "Region Pop. Density", "type": "number", "val": 0.02, "step":0.001, "format":"%.4f"},
+            "raw_REGION_POPULATION_RELATIVE": {"label": "Region Pop. Density", "type": "number", "val": 0.0188, "step":0.001, "format":"%.4f"},
         }
     }
-    with st.form(key="credit_risk_input_form"):
+    # Use a unique key for the form based on a counter to allow resetting
+    with st.form(key=f"credit_risk_input_form_{st.session_state.form_key_counter}"):
         st.header("🖋️ Client & Loan Application Details")
         ui_form_inputs = {}
         tabs = st.tabs(list(input_config.keys()))
         for i, (section_name, fields) in enumerate(input_config.items()):
             with tabs[i]:
                 for key, config in fields.items():
-                    if config["type"] == "number": ui_form_inputs[key] = st.number_input(config["label"], min_value=config.get("min"), max_value=config.get("max"), value=config["val"], step=config.get("step"), help=config.get("help"), format=config.get("format"), key=key)
-                    elif config["type"] == "select": ui_form_inputs[key] = st.selectbox(config["label"], config["options"], index=config["val_idx"], help=config.get("help"), key=key)
-                    elif config["type"] == "slider": ui_form_inputs[key] = st.slider(config["label"], min_value=config["min"], max_value=config["max"], value=config["val"], step=config["step"], help=config.get("help"), key=key)
-        st.markdown("---")
-        submitted = st.form_submit_button("🛡️ Assess Credit Risk", use_container_width=True) # use_container_width applied
+                    widget_key = f"{key}_{st.session_state.form_key_counter}" # Ensure unique keys on form reset
+                    if config["type"] == "number": ui_form_inputs[key] = st.number_input(config["label"], min_value=config.get("min"), max_value=config.get("max"), value=config["val"], step=config.get("step"), help=config.get("help"), format=config.get("format"), key=widget_key)
+                    elif config["type"] == "select": ui_form_inputs[key] = st.selectbox(config["label"], config["options"], index=config["val_idx"], help=config.get("help"), key=widget_key)
+                    elif config["type"] == "slider": ui_form_inputs[key] = st.slider(config["label"], min_value=config["min"], max_value=config["max"], value=config["val"], step=config["step"], help=config.get("help"), key=widget_key)
+        st.markdown("<br>", unsafe_allow_html=True) # Little space before button
+        submitted = st.form_submit_button("🛡️ Assess Credit Risk", use_container_width=True) # Corrected parameter
+
         if submitted:
-            with st.spinner("🔍 Analyzing application..."):
+            with st.spinner("⚙️ Deep Analysis In Progress..."): # More engaging spinner text
                 try:
                     feature_vector = create_feature_vector(ui_form_inputs, pp_params, final_feature_names, categorical_features_to_encode)
-                    if feature_vector is None or not final_feature_names: st.error("Preprocessing or resource error.")
-                    elif feature_vector.shape[1] != len(final_feature_names): st.error(f"FATAL: Feature count mismatch! Expected {len(final_feature_names)}, Got {feature_vector.shape[1]}.")
+                    if feature_vector is None or not final_feature_names: st.error("Preprocessing error. Cannot predict.")
+                    elif feature_vector.shape[1] != len(final_feature_names): st.error(f"FATAL: Feature count! Expected {len(final_feature_names)}, Got {feature_vector.shape[1]}.")
                     else:
                         prediction_probabilities = model.predict_proba(feature_vector)
                         st.session_state.prediction_proba = prediction_probabilities[0][1]
-                        st.session_state.show_results = True; st.rerun() # Use st.rerun
-                except Exception as e: st.error(f"Assessment Error: {e}"); st.text(traceback.format_exc())
+                        st.session_state.show_results = True; st.rerun()
+                except Exception as e: st.error(f"Assessment Engine Error: {e}"); st.text(traceback.format_exc())
+
 elif st.session_state.show_results and st.session_state.prediction_proba is not None:
     proba = st.session_state.prediction_proba; proba_percent = proba * 100
     if proba_percent >= 60: risk_level, risk_color, risk_icon = "Critical Risk", "status-critical-risk", "🚨"
@@ -290,8 +384,10 @@ elif st.session_state.show_results and st.session_state.prediction_proba is not 
         <div class="prediction-result-card">
             <div class="prediction-result-title">Credit Default Risk Assessment</div>
             <div class="prediction-result-main-value {risk_color}">{risk_icon} {proba_percent:.1f}%</div>
-            <div class="prediction-risk-level" style="color: var(--{risk_color.replace('status-','')})">Assessment: <strong>{risk_level}</strong></div>
+            <div class="prediction-risk-level" style="color: var(--{risk_color.replace('status-','')})">Assessment Outcome: <strong>{risk_level}</strong></div>
         </div>
     """, unsafe_allow_html=True)
-    if st.button("‹ Start New Assessment", use_container_width=True, key="new_assessment_button"): # use_container_width applied
-        st.session_state.show_results = False; st.session_state.prediction_proba = None; st.rerun() # Use st.rerun
+    if st.button("‹ New Assessment", use_container_width=True, key="new_assessment_button_results"): # Corrected parameter & unique key
+        st.session_state.show_results = False; st.session_state.prediction_proba = None; 
+        st.session_state.form_key_counter += 1 # Increment to reset form
+        st.rerun()
